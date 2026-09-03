@@ -208,6 +208,8 @@ tempCodeRunnerFile.py
 
 # PyPI configuration file
 .pypirc
+allure-results
+.idea
 
 # Marimo
 marimo/_static/
@@ -216,3 +218,5 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+!/main.py
+!/main.py
