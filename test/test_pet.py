@@ -121,3 +121,20 @@ class TestPet:
             assert response_json['id'] == payload['id'], "id питомца не совпал с ожидаемым"
             assert response_json['name'] == payload['name'], "имя питомца не совпало с ожидаемым"
             assert response_json['status'] == payload['status'], "имя питомца не совпал с ожидаемым"
+
+    @allure.description("Удаление питомца по ID")
+    def test_delete_pet(self, create_pet):
+        pet_id = create_pet["id"]
+
+        with allure.step("Отправка запроса на удаление питомца"):
+            response = requests.delete(f"{BASE_URL}/pet/{pet_id}")
+            print(response)
+
+        with allure.step("Проверка статуса ответа"):
+            assert response.status_code == 200, "Код ответа не совпал с ожидаемым"
+
+        with allure.step("Отправка запроса на получение питомца"):
+            second_response = requests.get(f"{BASE_URL}/pet/{pet_id}")
+
+        with allure.step("Проверка статуса ответа"):
+            assert second_response.status_code == 404, "Код ответа не совпал с ожидаемым"
