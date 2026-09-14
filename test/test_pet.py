@@ -167,7 +167,6 @@ class TestPet:
     def test_get_pets_by_status(self, status, expected_status_code, response_type):
         with allure.step(f"Отправка запроса на получение питомцев по статусу"):
             response = requests.get(f"{BASE_URL}/pet/findByStatus", params={"status": status})
-            print(type(response.json()))
 
         with allure.step("Проверка статуса ответа и формата данных"):
             assert response.status_code == expected_status_code
