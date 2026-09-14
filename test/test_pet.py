@@ -155,19 +155,20 @@ class TestPet:
 
     @allure.title("Получение списка питомцев по статусу")
     @pytest.mark.parametrize(
-        "status, expected_status_code",
+        "status, expected_status_code, response_type",
             [
-                ("available", 200),
-                ("sold", 200),
-                ("pending", 200),
-                ("qqq", 400),
-                ("", 400)
+                ("available", 200, list),
+                ("sold", 200, list),
+                ("pending", 200, list),
+                ("qqq", 400, dict),
+                ("", 400, dict),
             ]
         )
-    def test_get_pets_by_status(self, status, expected_status_code):
+    def test_get_pets_by_status(self, status, expected_status_code, response_type):
         with allure.step(f"Отправка запроса на получение питомцев по статусу"):
-            response = requests.get(f"{BASE_URL}/pet/findByStatus", params={"status": "sold"})
+            response = requests.get(f"{BASE_URL}/pet/findByStatus", params={"status": status})
+            print(type(response.json()))
 
         with allure.step("Проверка статуса ответа и формата данных"):
-            assert response.status_code == 200
-            assert isinstance(response.json(), list)
+            assert response.status_code == expected_status_code
+            assert isinstance(response.json(), response_type)
