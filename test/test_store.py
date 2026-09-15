@@ -54,3 +54,11 @@ class TestStore:
 
         with allure.step("Проверка статуса ответа"):
             assert response.status_code == 404, "Код ответа не совпал с ожидаемым"
+
+    @allure.description("Попытка получить информацию о несуществующем заказе")
+    def test_get_nonexistent_order(self):
+        with allure.step("Отправка запроса на получение заказа"):
+            response = requests.get(f"{BASE_URL}/store/order/9999")
+
+        with allure.step("Проверка статуса ответа"):
+            assert response.status_code == 404, "Код ответа не совпал с ожидаемым"
