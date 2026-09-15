@@ -35,8 +35,7 @@ class TestStore:
     def test_get_order_by_id(self):
         with allure.step("Отправка запроса на получение заказа"):
             response = requests.get(f"{BASE_URL}/store/order/1")
-            response_json = response.json()
 
         with allure.step("Проверка статуса ответа и валидация json-схемы"):
             assert response.status_code == 200, "Код ответа не совпал с ожидаемым"
-            jsonschema.validate(response_json, STORE_SCHEMA)
+            jsonschema.validate(response.json(), STORE_SCHEMA)
