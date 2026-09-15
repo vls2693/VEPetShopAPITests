@@ -30,3 +30,13 @@ class TestStore:
             assert payload["quantity"] == response_json.get("quantity")
             assert payload["status"] == response_json.get("status")
             assert payload["complete"] == response_json.get("complete")
+
+    @allure.description("Получение заказа по id")
+    def test_get_order_by_id(self):
+        with allure.step("Отправка запроса на получение заказа"):
+            response = requests.get(f"{BASE_URL}/store/order/1")
+            response_json = response.json()
+
+        with allure.step("Проверка статуса ответа и валидация json-схемы"):
+            assert response.status_code == 200, "Код ответа не совпал с ожидаемым"
+            jsonschema.validate(response_json, STORE_SCHEMA)
