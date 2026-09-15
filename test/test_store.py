@@ -3,6 +3,7 @@ import jsonschema
 import pytest
 import requests
 from .schemas.store_schema import STORE_SCHEMA
+from .schemas.inventory_schema import INVENTORY_SCHEMA
 
 BASE_URL = "http://5.181.109.28:9090/api/v3"
 
@@ -62,3 +63,12 @@ class TestStore:
 
         with allure.step("Проверка статуса ответа"):
             assert response.status_code == 404, "Код ответа не совпал с ожидаемым"
+
+    @allure.description("Получение инвентаря магазина")
+    def test_get_inventory(self):
+        with allure.step("Отправка запроса на получение инвентаря"):
+            response = requests.get(f"{BASE_URL}/store/inventory")
+
+        with allure.step("Проверка статуса ответа и валидация json-схемы"):
+            assert response.status_code == 200, "Код ответа не совпал с ожидаемым"
+            jsonschema.validate(response.json(), INVENTORY_SCHEMA)
