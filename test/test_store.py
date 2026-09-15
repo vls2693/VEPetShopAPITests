@@ -39,3 +39,18 @@ class TestStore:
         with allure.step("Проверка статуса ответа и валидация json-схемы"):
             assert response.status_code == 200, "Код ответа не совпал с ожидаемым"
             jsonschema.validate(response.json(), STORE_SCHEMA)
+
+    @allure.description("Удаление заказа по id")
+    def test_delete_order_by_id(self,create_order):
+        order_id = create_order["id"]
+        with allure.step("Отправка запроса на удаление заказа"):
+            response = requests.delete(f"{BASE_URL}/store/order/{order_id}")
+
+        with allure.step("Проверка статуса ответа"):
+            assert response.status_code == 200, "Код ответа не совпал с ожидаемым"
+
+        with allure.step("Отправка запроса на получение заказа"):
+            response = requests.get(f"{BASE_URL}/store/order/{order_id}")
+
+        with allure.step("Проверка статуса ответа"):
+            assert response.status_code == 404, "Код ответа не совпал с ожидаемым"
