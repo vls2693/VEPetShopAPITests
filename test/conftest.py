@@ -2,6 +2,7 @@ import jsonschema
 import pytest
 import requests
 from .schemas.pet_schema import PET_SCHEMA
+from .schemas.store_schema import STORE_SCHEMA
 
 BASE_URL = "http://5.181.109.28:9090/api/v3"
 
@@ -20,5 +21,24 @@ def create_pet():
 
     assert response.status_code == 200, "Код ответа не совпал с ожидаемым"
     jsonschema.validate(response_json, PET_SCHEMA)
+
+    return response_json
+
+@pytest.fixture(scope="function")
+def create_order():
+    """Фикстура для создания заказа"""
+    payload = {
+        "id": 1,
+        "petId": 1,
+        "quantity": 1,
+        "status": "placed",
+        "complete": True
+    }
+
+    response = requests.post(f"{BASE_URL}/store/order", json=payload)
+    response_json = response.json()
+
+    assert response.status_code == 200, "Код ответа не совпал с ожидаемым"
+    jsonschema.validate(response_json, STORE_SCHEMA)
 
     return response_json
